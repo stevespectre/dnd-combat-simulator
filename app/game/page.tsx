@@ -1,29 +1,23 @@
-"use client"
+'use client';
 
-import React from "react";
-import Battlefield from "../components/Battlefield";
-import EntityStatsHud from "../components/EntityStatsHud";
-import GameLog from "../components/GameLog";
-import { GlobalContextProvider } from "../Context/gameState";
-import Player from "@/entities/player";
-import Goblin from "@/entities/goblin";
+import React from 'react';
+import Battlefield from '../components/Battlefield';
+import EntityStatsHud from '../components/EntityStatsHud';
+import GameLog from '../components/GameLog';
+import { GlobalContextProvider } from '../Context/gameState';
+import { createGoblin, createPlayer } from '@/src/utils/entityFactory';
+import EntityType from '@/src/entities/entityType';
 
 function Game() {
-  const players = [
-    new Player('Józsi'),
-    new Player('Béla'),
-    new Player('Norbi'),
-    new Player('Szidi'),
-    new Player('Dani'),
-  ]
+  const players = [createPlayer('Józsi'), createPlayer('Béla'), createPlayer('Norbi'), createPlayer('Szidi'), createPlayer('Dani')];
 
   const goblins = [
-    new Goblin(),
-    new Goblin(),
-    new Goblin(),
-    new Goblin(),
-    new Goblin(),
-  ]
+    createGoblin(EntityType.GOBLIN),
+    createGoblin(EntityType.GOBLIN),
+    createGoblin(EntityType.GOBLIN),
+    createGoblin(EntityType.GOBLIN),
+    createGoblin(EntityType.GOBLIN),
+  ];
 
   return (
     <div className="h-screen flex">
