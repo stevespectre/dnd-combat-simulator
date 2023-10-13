@@ -37,25 +37,17 @@ function GameLog() {
 
         return (
           <>
-            <div key={index} style={{ width: '100%', background: index === 0 ? '#A1CDDB' : '' }}>
-              <div className="logbox-content">
+            <div key={index} style={{width: '100%', background: index === 0 ? '#A1CDDB' : ''}}>
+              <div className='logbox-content'>
                 <div className="source-entity-name">{log.source}</div>
                 <div className="log-details">
-                  <p>
-                    {log.type + ' '}
-                    <strong>{log.target}</strong>
-                  </p>
-                  <p>
-                    {'Rolled: '} <strong>{log.roll}</strong> {' (' + log.result + ')'}
-                  </p>
-                  <p>
-                    {'Damage: '}
-                    <strong>{damage}</strong>
-                  </p>
+                  <p>{log.type + ' '}<strong>{log.target}</strong></p>
+                  <p>{'Rolled: '} <strong>{log.roll}</strong> {' (' + log.result + ')'}</p>
+                  <p>{'Damage: '}<strong>{damage}</strong></p>
                 </div>
               </div>
             </div>
-            <div className="divider" />
+            <div className='divider' />
           </>
         );
       })}

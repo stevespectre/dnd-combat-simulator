@@ -17,7 +17,7 @@
 }
 
 body {
-  color: #46799d;
+  color: #46799D;
   background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
 
@@ -48,5 +48,5 @@ body {
   margin: 0 auto;
   width: 90%;
   height: 1px;
-  border: solid 1px #46799d;
+  border: solid 1px #46799D;
 }
