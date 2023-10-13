@@ -1,7 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { roll } from '../src/utils/diceSimulator';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -11,7 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  roll('2d20+1');
   return (
     <html lang="en">
       <body className={inter.className}>{children}</body>
