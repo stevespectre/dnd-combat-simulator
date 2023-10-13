@@ -5,6 +5,8 @@ import { PositionXY } from "@/src/types/positionXY";
 import backgroundImage from "../../src/assets/images/green-hill.jpg";
 import Entity from "@/src/entities/entity";
 import EntityType from "@/src/entities/entityType";
+import { useGlobalContextProvider } from "../Context/gameState";
+import { attack } from "@/src/utils/combat";
 
 const ROWS = 5;
 const COLS = 5;
@@ -24,6 +26,7 @@ function Battlefield({ entities }: Props) {
   const [battlefieldSize, setBattlefieldSize] = useState<number>();
   const [tileSize, setTileSize] = useState<number>();
   const [grid, setGrid] = useState<Tile[]>();
+  const { turn, setTurn, started, setStarted } = useGlobalContextProvider();
 
   useEffect(() => {
     if (containerRef.current) {
@@ -66,6 +69,32 @@ function Battlefield({ entities }: Props) {
     }
   }, [battlefieldSize, tileSize, entities]);
 
+  useEffect(() => {
+    let shouldStop = false
+    if (grid?.length === ROWS * COLS && started) {
+      for (let i = 0; i < entities.length - 1; i++) {
+        const enemies = entities.filter(entity => entity.entityType !== entities[i].entityType  && entity.hitPoints >= 0);
+        const targetIndex = Math.floor(Math.random() * enemies.length);
+        const enemy = enemies[targetIndex];
+
+        attack(entities[i], enemy);
+
+        const livingEnemies = enemies.filter(entity => entity.hitPoints >= 0).length
+
+        if (livingEnemies === 0) {
+          setStarted(false);
+          console.log('STOP')
+          shouldStop = true;
+          break;
+        }
+      }
+
+      if (!shouldStop) {
+        setTurn(turn + 1)
+      }
+    }
+  }, [grid, turn, setTurn, started, setStarted, entities])
+
   return (
     <div
       ref={containerRef}
@@ -87,7 +116,7 @@ function Battlefield({ entities }: Props) {
             >
               {tile.entity &&
                 <div 
-                  className="w-[80%] h-[80%] bg-contain absolute left-[50%] top-[50%] -translate-y-[50%] -translate-x-[50%]" 
+                  className={`w-[80%] h-[80%] bg-contain absolute left-[50%] top-[50%] -translate-y-[50%] -translate-x-[50%] ${tile.entity.hitPoints <= 0 ? 'bg-red-500' : ''}`} 
                   style={{ backgroundImage: `url(${tile.entity.image})` }}>
                 </div>
               }

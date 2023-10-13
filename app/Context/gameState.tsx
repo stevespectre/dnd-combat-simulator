@@ -28,14 +28,20 @@ export enum ActionResult {
 interface ContextType {
   action: Action;
   setAction: Dispatch<SetStateAction<Action>>;
+  turn: number;
+  setTurn: Dispatch<SetStateAction<number>>;
+  started: boolean;
+  setStarted: Dispatch<SetStateAction<boolean>>;
 }
 
 const GlobalContext = createContext<ContextType | null>(null);
 
 export const GlobalContextProvider = ({ children }: Props) => {
   const [action, setAction] = useState<Action>(null);
+  const [turn, setTurn] = useState<number>(0);
+  const [started, setStarted] = useState<boolean>(false);
 
-  return <GlobalContext.Provider value={{ action, setAction }}>{children}</GlobalContext.Provider>;
+  return <GlobalContext.Provider value={{ action, setAction, turn, setTurn, started, setStarted }}>{children}</GlobalContext.Provider>;
 };
 
 export const useGlobalContextProvider = () => {
