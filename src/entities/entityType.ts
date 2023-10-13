@@ -3,4 +3,4 @@ enum EntityType {
   GOBLIN = 'Goblin',
 }
 
-export default EntityType
+export default EntityType;

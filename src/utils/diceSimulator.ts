@@ -1,7 +1,7 @@
 export function roll(diceRollExpression: string): number {
   const expression = diceRollExpression.toLowerCase();
-  const plus = diceRollExpression.indexOf('+') > -1 ? true : false;
-  const minus = diceRollExpression.indexOf('-') > -1 ? true : false;
+  const plus = diceRollExpression.indexOf('+') > -1;
+  const minus = diceRollExpression.indexOf('-') > -1;
   const splitOnD = expression.split('d');
   const numberOfRolls = parseInt(splitOnD[0]);
   const regex = new RegExp('[+-]');
@@ -19,7 +19,5 @@ export function roll(diceRollExpression: string): number {
     result -= extra;
   }
 
-  console.log('Dice roll expression: ' + numberOfRolls + 'd' + numberOfDiceSides + (plus ? '+' + extra : minus ? '-' + extra : ''));
-  console.log('Result', result);
   return result;
 }
