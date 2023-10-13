@@ -2,9 +2,9 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { PositionXY } from "@/src/types/positionXY";
-import Player from "@/entities/player";
-import Goblin from "@/entities/goblin";
 import backgroundImage from "../../src/assets/images/green-hill.jpg";
+import Entity from "@/src/entities/entity";
+import EntityType from "@/src/entities/entityType";
 
 const ROWS = 5;
 const COLS = 5;
@@ -12,15 +12,14 @@ const COLS = 5;
 type Tile = {
   position: PositionXY;
   size: number;
-  entity?: Goblin | Player | null;
+  entity?: Entity | null;
 };
 
 type Props = {
-  players: Player[]
-  enemies: Goblin[]
+  entities: Entity[]
 }
 
-function Battlefield({ players, enemies }: Props) {
+function Battlefield({ entities }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [battlefieldSize, setBattlefieldSize] = useState<number>();
   const [tileSize, setTileSize] = useState<number>();
@@ -55,17 +54,17 @@ function Battlefield({ players, enemies }: Props) {
         });
       });
 
-      players.forEach((char, index) => {
+      entities.filter(entity => entity.entityType === EntityType.PLAYER).forEach((char, index) => {
         grid[index].entity = char; 
       });
 
-      enemies.forEach((char, index) => {
+      entities.filter(entity => entity.entityType === EntityType.GOBLIN).forEach((char, index) => {
         grid[(grid.length - 1 - index)].entity = char; 
       });
 
       setGrid(grid);
     }
-  }, [battlefieldSize, tileSize, players, enemies]);
+  }, [battlefieldSize, tileSize, entities]);
 
   return (
     <div
@@ -86,7 +85,12 @@ function Battlefield({ players, enemies }: Props) {
                 top: `${tile.position.y}px`,
               }}
             >
-              {tile.entity?.name}
+              {tile.entity &&
+                <div 
+                  className="w-[80%] h-[80%] bg-contain absolute left-[50%] top-[50%] -translate-y-[50%] -translate-x-[50%]" 
+                  style={{ backgroundImage: `url(${tile.entity.image})` }}>
+                </div>
+              }
             </div>
           ))}
         </div>

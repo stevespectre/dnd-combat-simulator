@@ -5,31 +5,28 @@ import Battlefield from "../components/Battlefield";
 import EntityStatsHud from "../components/EntityStatsHud";
 import GameLog from "../components/GameLog";
 import { GlobalContextProvider } from "../Context/gameState";
-import Player from "@/entities/player";
-import Goblin from "@/entities/goblin";
+import Entity from "@/src/entities/entity";
+import { createGoblin, createPlayer } from "@/src/utils/entityFactory";
+import { roll } from "@/src/utils/diceSimulator";
 
 function Game() {
-  const players = [
-    new Player('Józsi'),
-    new Player('Béla'),
-    new Player('Norbi'),
-    new Player('Szidi'),
-    new Player('Dani'),
+  const players: Entity[] = [
+    createPlayer('Szidi'),
+    createPlayer('Norbi'),
+    createPlayer('Dani'),
+    createPlayer('Isti'),
+    createPlayer('Peti'),
   ]
 
-  const goblins = [
-    new Goblin(),
-    new Goblin(),
-    new Goblin(),
-    new Goblin(),
-    new Goblin(),
-  ]
+  const goblins: Entity[] = [...Array(5)].map((_, index) => createGoblin(`Goblin-${index + 1}`))
+
+  const entities = [...players, ...goblins].sort((a, b ) => roll('1d20') - roll('1d20'))
 
   return (
     <div className="h-screen flex">
       <GlobalContextProvider>
-        <EntityStatsHud />
-        <Battlefield players={players} enemies={goblins} />
+        <EntityStatsHud entities={entities} />
+        <Battlefield entities={entities} />
         <GameLog />
       </GlobalContextProvider>
     </div>

@@ -7,6 +7,11 @@ interface Entity {
   name: string;
 
   /**
+   * Image source of the entity
+   */
+  image: string;
+
+  /**
    * Hit points can be either a static number or a string on which we randomly generate
    * For example, player HP: 12, monster hp: 1d8+1 (these are interchangeable)
    */
