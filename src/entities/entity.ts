@@ -1,4 +1,4 @@
-import EntityType from '@/entities/entityType';
+import EntityType from '@/src/entities/entityType';
 
 interface Entity {
   /**
@@ -10,7 +10,7 @@ interface Entity {
    * Hit points can be either a static number or a string on which we randomly generate
    * For example, player HP: 12, monster hp: 1d8+1 (these are interchangeable)
    */
-  hitPoints: string | number;
+  hitPoints: number;
 
   /**
    * Damage is a random generated number
