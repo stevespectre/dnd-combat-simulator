@@ -1,9 +1,9 @@
 import EntityType from '@/src/entities/entityType';
-import BaseEntity from '@/src/entities/baseEntity';
+import Entity from '@/src/entities/entity';
 import { roll } from './diceSimulator';
 
-export function createPlayer(name: string): BaseEntity {
-  const player: BaseEntity = {
+export function createPlayer(name: string): Entity {
+  const player: Entity = {
     name,
     hitPoints: 12,
     damage: '1d8',
@@ -13,8 +13,8 @@ export function createPlayer(name: string): BaseEntity {
   return player;
 }
 
-export function createGoblin(name: string): BaseEntity {
-  const goblin: BaseEntity = {
+export function createGoblin(name: string): Entity {
+  const goblin: Entity = {
     name,
     hitPoints: roll('1d8+1'),
     damage: '1d6',

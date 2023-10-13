@@ -1,4 +1,4 @@
-import EntityType from '@/entities/entityType';
+import EntityType from '@/src/entities/entityType';
 
 interface Entity {
   /**

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 
 function Battlefield() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -18,10 +18,7 @@ function Battlefield() {
   }, [containerRef]);
 
   return (
-    <div
-      ref={containerRef}
-      className="flex-1 flex justify-center content-center"
-    >
+    <div ref={containerRef} className="flex-1 flex justify-center content-center">
       Battlefield
     </div>
   );
