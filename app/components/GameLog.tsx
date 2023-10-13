@@ -13,7 +13,7 @@ function GameLog() {
     console.log('action', action);
     if (action) {
       setLogs((prevState) => {
-        return [...prevState, action];
+        return [action, ...prevState];
       });
     }
   }, [action]);
@@ -28,22 +28,35 @@ function GameLog() {
   }, []);
 
   return (
-    <div className="w-[200px] border-l border-blue-500 px-2 py-4">
+    <div className="w-[200px] border-l border-blue-500 py-4 overflow-scroll">
       <button className="bg-red-500" onClick={doTheThing}>
         Do the thing
       </button>
       {logs.map((log, index) => {
         const damage = log.value > 0 ? log.value : 'No damage';
+
         return (
-          <div key={index}>
-            <div className="source-entity-name">{log.source}</div>
-            <div>
-              <p>{log.type + ' ' + log.target}</p>
-              <p>{'Rolled: ' + log.roll + ' (' + log.result + ')'}</p>
-              <p>{'Damage: ' + damage}</p>
+          <>
+            <div key={index} style={{ width: '100%', background: index === 0 ? '#A1CDDB' : '' }}>
+              <div className="logbox-content">
+                <div className="source-entity-name">{log.source}</div>
+                <div className="log-details">
+                  <p>
+                    {log.type + ' '}
+                    <strong>{log.target}</strong>
+                  </p>
+                  <p>
+                    {'Rolled: '} <strong>{log.roll}</strong> {' (' + log.result + ')'}
+                  </p>
+                  <p>
+                    {'Damage: '}
+                    <strong>{damage}</strong>
+                  </p>
+                </div>
+              </div>
             </div>
-            <div style={{ width: '80%', height: '1px', border: 'solid 1px #12273D' }} />
-          </div>
+            <div className="divider" />
+          </>
         );
       })}
     </div>
