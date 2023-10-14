@@ -31,11 +31,17 @@ export enum ActionResult {
 interface ContextType {
   action: Action;
   setAction: Dispatch<SetStateAction<Action>>;
+  turn: number;
+  setTurn: Dispatch<SetStateAction<number>>;
+  started: boolean;
+  setStarted: Dispatch<SetStateAction<boolean>>;
 }
 
 const GlobalContext = createContext<ContextType | null>(null);
 
 export const GlobalContextProvider = ({ children }: Props) => {
+  const [turn, setTurn] = useState<number>(0);
+  const [started, setStarted] = useState<boolean>(false);
   const [action, setAction] = useState<Action>({
     type: ActionType.IDLE,
     source: '',
@@ -45,7 +51,7 @@ export const GlobalContextProvider = ({ children }: Props) => {
     value: 0,
   });
 
-  return <GlobalContext.Provider value={{ action, setAction }}>{children}</GlobalContext.Provider>;
+  return <GlobalContext.Provider value={{ action, setAction, turn, setTurn, started, setStarted }}>{children}</GlobalContext.Provider>;
 };
 
 export const useGlobalContextProvider = () => {
