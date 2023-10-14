@@ -18,6 +18,7 @@ export function action(attacker: Entity, defenders: Entity[]): Action {
       break;
     case Strategy.REVENGE:
       target = attacker.lastAttacker!;
+      break;
     default:
       target = defenders[roll('1d' + (defenders.length - 1))];
   }

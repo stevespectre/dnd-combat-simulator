@@ -3,7 +3,7 @@ import Entity from '@/src/entities/entity';
 import { roll } from './diceSimulator';
 import { PositionXY } from '../types/positionXY';
 
-export function createPlayer(name: string, position: PositionXY, strategy: Strategy): Entity {
+export function createPlayer(name: string, position?: PositionXY, strategy?: Strategy): Entity {
   return {
     name,
     hitPoints: 12,
@@ -14,12 +14,12 @@ export function createPlayer(name: string, position: PositionXY, strategy: Strat
     movementsLeft: 2,
     armorClass: 12,
     entityType: EntityType.PLAYER,
-    position,
-    strategy,
+    position: position ? position : { x: 0, y: 0 },
+    strategy: strategy ? strategy : Strategy.NO_STRATEGY,
   };
 }
 
-export function createGoblin(name: string, position: PositionXY, strategy: Strategy): Entity {
+export function createGoblin(name: string, position?: PositionXY, strategy?: Strategy): Entity {
   return {
     name,
     hitPoints: roll('1d8+1'),
@@ -30,7 +30,7 @@ export function createGoblin(name: string, position: PositionXY, strategy: Strat
     movementsLeft: 2,
     armorClass: 10,
     entityType: EntityType.GOBLIN,
-    position,
-    strategy,
+    position: position ? position : { x: 0, y: 0 },
+    strategy: strategy ? strategy : Strategy.NO_STRATEGY,
   };
 }
