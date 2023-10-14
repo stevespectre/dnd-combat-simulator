@@ -1,10 +1,11 @@
 import Entity from '@/src/entities/entity';
 import { roll } from '@/src/utils/diceSimulator';
 import { PositionXY } from '../types/positionXY';
+import { Action, ActionResult, ActionType } from '@/app/Context/gameState';
 
 const d20: string = '1d20';
 
-export function action(attacker: Entity, defenders: Entity[]) {
+export function action(attacker: Entity, defenders: Entity[]): Action {
   const distanceMap = getDistanceMap(attacker, defenders);
 
   let target: Entity;
@@ -15,25 +16,18 @@ export function action(attacker: Entity, defenders: Entity[]) {
     case Strategy.LOWEST_HEALTH:
       target = getLowestHealthTarget(defenders);
       break;
+    case Strategy.REVENGE:
+      target = attacker.lastAttacker!;
     default:
       target = defenders[roll('1d' + (defenders.length - 1))];
   }
 
   const targetDistance = distanceMap.get(target)!;
 
-  if (attacker.attacksLeft > 0) {
-    if (attacker.weaponRange >= targetDistance) {
-      attack(attacker, target);
-      attacker.attacksLeft--;
-      if (target.hitPoints <= 0) {
-        defenders = defenders.filter((defender) => defender !== target);
-      }
-      action(attacker, defenders);
-    } else if (attacker.movementsLeft > 0) {
-      move(attacker, target);
-      attacker.movementsLeft--;
-      action(attacker, defenders);
-    }
+  if (attacker.weaponRange >= targetDistance) {
+    return attack(attacker, target);
+  } else {
+    return move(attacker, target);
   }
 }
 
@@ -59,30 +53,27 @@ function getLowestHealthTarget(defenders: Entity[]): Entity {
   return defenders.sort((a, b) => (a.hitPoints < b.hitPoints ? -1 : a.hitPoints > b.hitPoints ? 1 : 0))[0];
 }
 
-function attack(attacker: Entity, defender: Entity) {
-  attacker.attacksLeft;
-  console.log(attacker.name, 'attacks', defender.name);
+function attack(attacker: Entity, defender: Entity): Action {
+  attacker.attacksLeft--;
 
   const attackRoll = roll(d20);
 
-  console.log(attacker.name, 'rolls for attack');
-
   if (attackRoll < defender.armorClass) {
-    console.log(attackRoll, 'is a miss');
-    return;
+    return {
+      type: ActionType.ATTACK,
+      source: attacker.name,
+      target: defender.name,
+      roll: attackRoll,
+      result: ActionResult.MISS,
+      value: 0,
+    };
   }
 
-  if (attackRoll == 20) {
-    console.log('Natural', 20, 'is a critical hit!');
-    damage(attacker.damage, true, defender);
-    return;
-  }
-
-  console.log(attackRoll, 'is a hit');
-  damage(attacker.damage, false, defender);
+  return damage(attacker, attackRoll, defender);
 }
 
 function move(attacker: Entity, target: Entity) {
+  attacker.movementsLeft--;
   const attackerPosition = attacker.position;
   const defenderPosition = target.position;
 
@@ -94,6 +85,15 @@ function move(attacker: Entity, target: Entity) {
   } else {
     yAxisMovement(attackerPosition, defenderPosition);
   }
+
+  return {
+    type: ActionType.MOVE,
+    source: attacker.name,
+    target: `(${attackerPosition.x},${attackerPosition.y})`,
+    roll: 0,
+    result: ActionResult.MOVED,
+    value: 0,
+  };
 }
 
 function diagonalMovement(attackerPosition: PositionXY, defenderPosition: PositionXY) {
@@ -125,31 +125,22 @@ function yAxisMovement(attackerPosition: PositionXY, defenderPosition: PositionX
   }
 }
 
-// If we want to abide by the official 3.5 rules
-function confirmCritical(attacker: Entity, defender: Entity) {
-  console.log('Natural', 20, 'is a potential critical hit!');
-  console.log(attacker.name, 'rolls to confirm critical hit');
+function damage(attacker: Entity, attackRoll: number, defender: Entity): Action {
+  let damageRoll = roll(attacker.damage);
 
-  const confirmCritical = roll(d20);
-
-  if (confirmCritical < defender.armorClass) {
-    console.log(confirmCritical, 'is not a critical hit!');
-    damage(attacker.damage, false, defender);
-    return;
-  }
-
-  console.log(confirmCritical, 'is a critical hit!');
-  damage(attacker.damage, true, defender);
-}
-
-export function damage(damage: string, isCritical: boolean, defender: Entity) {
-  let damageRoll = roll(damage);
-
-  if (isCritical) {
-    damageRoll += roll(damage);
+  if (attackRoll == 20) {
+    damageRoll += roll(attacker.damage);
   }
 
   defender.hitPoints -= damageRoll;
+  defender.lastAttacker = attacker;
 
-  console.log(defender.name, 'suffers', damageRoll, 'damage');
+  return {
+    type: ActionType.ATTACK,
+    source: attacker.name,
+    target: defender.name,
+    roll: attackRoll,
+    result: attackRoll === 20 ? ActionResult.CRITICAL : ActionResult.HIT,
+    value: damageRoll,
+  };
 }
