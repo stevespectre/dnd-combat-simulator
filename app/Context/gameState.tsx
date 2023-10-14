@@ -16,13 +16,16 @@ export interface Action {
 }
 
 export enum ActionType {
+  IDLE = 'Idle',
   ATTACK = 'Attacked:',
+  MOVE = 'Moved:',
 }
 
 export enum ActionResult {
   HIT = 'Hit',
   CRITICAL = 'Critical',
   MISS = 'Miss',
+  MOVED = 'Moved',
 }
 
 interface ContextType {
@@ -33,7 +36,14 @@ interface ContextType {
 const GlobalContext = createContext<ContextType | null>(null);
 
 export const GlobalContextProvider = ({ children }: Props) => {
-  const [action, setAction] = useState<Action>(null);
+  const [action, setAction] = useState<Action>({
+    type: ActionType.IDLE,
+    source: '',
+    target: '',
+    roll: 0,
+    result: ActionResult.MISS,
+    value: 0,
+  });
 
   return <GlobalContext.Provider value={{ action, setAction }}>{children}</GlobalContext.Provider>;
 };

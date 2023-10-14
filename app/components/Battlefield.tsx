@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { PositionXY } from '@/src/types/positionXY';
 import backgroundImage from '../../src/assets/images/green-hill.jpg';
-import Entity from "@/src/entities/entity";
+import Entity from '@/src/entities/entity';
 
 const ROWS = 5;
 const COLS = 5;
