@@ -1,4 +1,5 @@
 import EntityType from '@/src/entities/entityType';
+import { PositionXY } from '../types/positionXY';
 
 interface Entity {
   /**
@@ -19,6 +20,26 @@ interface Entity {
   damage: string;
 
   /**
+   * Range of the character's weapon on the grid, minimum 1
+   */
+  weaponRange: number;
+
+  /**
+   * The number of actions the character can take during a turn
+   */
+  attacksLeft: number;
+
+  /**
+   * Range of the character's movement on the grid, minimum 1
+   */
+  movementRange: number;
+
+  /**
+   * The number of cells the character can move during a turn
+   */
+  movementsLeft: number;
+
+  /**
    * Or AC for shorthand, determines the defense of a certain entity
    * For example 14
    */
@@ -29,6 +50,21 @@ interface Entity {
    * It can also be used to determine if it's a monster entity - entityType != EntityType.PLAYER
    */
   entityType: EntityType;
+
+  /**
+   * The position of the entity on the grid.
+   */
+  position: PositionXY;
+
+  /**
+   * The attack strategy of the the character
+   */
+  strategy: Strategy;
+
+  /**
+   * The last entity that attacked this entity
+   */
+  lastAttacker?: Entity;
 }
 
 export default Entity;

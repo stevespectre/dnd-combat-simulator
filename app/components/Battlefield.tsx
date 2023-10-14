@@ -1,10 +1,9 @@
-"use client";
+'use client';
 
-import React, { useEffect, useRef, useState } from "react";
-import { PositionXY } from "@/src/types/positionXY";
-import Player from "@/entities/player";
-import Goblin from "@/entities/goblin";
-import backgroundImage from "../../src/assets/images/green-hill.jpg";
+import React, { useEffect, useRef, useState } from 'react';
+import { PositionXY } from '@/src/types/positionXY';
+import backgroundImage from '../../src/assets/images/green-hill.jpg';
+import Entity from '@/src/entities/entity';
 
 const ROWS = 5;
 const COLS = 5;
@@ -12,13 +11,13 @@ const COLS = 5;
 type Tile = {
   position: PositionXY;
   size: number;
-  entity?: Goblin | Player | null;
+  entity?: Entity | null;
 };
 
 type Props = {
-  players: Player[]
-  enemies: Goblin[]
-}
+  players: Entity[];
+  enemies: Entity[];
+};
 
 function Battlefield({ players, enemies }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -56,11 +55,11 @@ function Battlefield({ players, enemies }: Props) {
       });
 
       players.forEach((char, index) => {
-        grid[index].entity = char; 
+        grid[index].entity = char;
       });
 
       enemies.forEach((char, index) => {
-        grid[(grid.length - 1 - index)].entity = char; 
+        grid[grid.length - 1 - index].entity = char;
       });
 
       setGrid(grid);
