@@ -1,41 +1,18 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Action, ActionResult, ActionType, useGlobalContextProvider } from '../Context/gameState';
+import { Action, ActionType, useGlobalContextProvider } from '../Context/gameState';
 
-const initialState = [
-  {
-    type: ActionType.ATTACK,
-    source: 'Józsi',
-    target: 'Goblin 01',
-    roll: 12,
-    result: ActionResult.HIT,
-    value: 6,
-  },
-  {
-    type: ActionType.ATTACK,
-    source: 'Béla',
-    target: 'Goblin 02',
-    roll: 8,
-    result: ActionResult.MISS,
-    value: 0,
-  },
-  {
-    type: ActionType.ATTACK,
-    source: 'Goblin 01',
-    target: 'Józsi',
-    roll: 20,
-    result: ActionResult.CRITICAL,
-    value: 10,
-  },
-];
+type Props = {
+  round: number;
+};
 
-function GameLog() {
+function GameLog({ round }: Props) {
   const { action } = useGlobalContextProvider();
-  const [logs, setLogs] = useState<Action[]>(initialState);
+  const [logs, setLogs] = useState<Action[]>([]);
 
   useEffect(() => {
-    if (action) {
+    if (action && action.type !== ActionType.IDLE) {
       setLogs((prevState) => {
         return [action, ...prevState];
       });
@@ -45,7 +22,9 @@ function GameLog() {
   return (
     <div className="w-[200px] border-l border-blue-500 py-4 overflow-scroll">
       <div className="section-title">{'Battle log'}</div>
-
+      <div className="logbox-content">
+        <strong>{'Round ' + round}</strong>
+      </div>
       {logs.map((log, index) => {
         const damage = log.value > 0 ? log.value : 'No damage';
 
@@ -59,13 +38,17 @@ function GameLog() {
                     {log.type + ' '}
                     <strong>{log.target}</strong>
                   </p>
-                  <p>
-                    {'Rolled: '} <strong>{log.roll}</strong> {' (' + log.result + ')'}
-                  </p>
-                  <p>
-                    {'Damage: '}
-                    <strong>{damage}</strong>
-                  </p>
+                  {log.type === ActionType.ATTACK && (
+                    <>
+                      <p>
+                        {'Rolled: '} <strong>{log.roll}</strong> {' (' + log.result + ')'}
+                      </p>
+                      <p>
+                        {'Damage: '}
+                        <strong>{damage}</strong>
+                      </p>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

@@ -1,9 +1,10 @@
 import EntityType from '@/src/entities/entityType';
 import Entity from '@/src/entities/entity';
 import { roll } from './diceSimulator';
-import goblin from "../../src/assets/images/goblin.png";
-import hero from "../../src/assets/images/hero.png";
+import goblin from '../../src/assets/images/goblin.png';
+import hero from '../../src/assets/images/hero.png';
 import { PositionXY } from '../types/positionXY';
+import { Strategy } from '@/src/types/stragegy';
 
 export function createPlayer(name: string, position?: PositionXY, strategy?: Strategy): Entity {
   return {

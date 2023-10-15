@@ -1,9 +1,10 @@
 import EntityType from '@/src/entities/entityType';
 import { PositionXY } from '../types/positionXY';
+import { Strategy } from '@/src/types/stragegy';
 
 interface Entity {
   /**
-   * Name of the entity for monsters it will ba static based on the Monster Type for players it can be custom
+   * Name of the entity it is used for identification purposes must ensure it's unique
    */
   name: string;
 
